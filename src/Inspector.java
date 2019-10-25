@@ -35,26 +35,12 @@ public class Inspector {
     		inspectClass(classInterfaces, obj, recursive, depth+1);
     	}
     	
-    	// Get constructors
+    	// Get and print constructors
     	Constructor[] classConstructors = c.getConstructors();
     	for(Constructor classConstructor: classConstructors) {
-    		System.out.println();
-    		printSpacing(depth);
-    		System.out.println("Constructor Name: " + classConstructor.getName());
-    		Class[] parameterTypes = classConstructor.getParameterTypes();
-    		
-    		printSpacing(depth);
-    		System.out.print(classConstructor.getName() + " Parameter Type: ");
-    		for(Class parameterType: parameterTypes) {
-    			printSpacing(depth);
-    			System.out.print(parameterType.getName());
-    		}
-    		System.out.println();
-    		
-    		printSpacing(depth);
-    		System.out.println(classConstructor.getName() + " Modifier: " + Modifier.toString(classConstructor.getModifiers()));
+    		printConstructor(classConstructor, depth);
     	}
-    	// Get methods
+    	// Get and print methods
     	Method[] classMethods = c.getMethods();
     	String methodName;
     	for(Method classMethod: classMethods) {
@@ -85,26 +71,33 @@ public class Inspector {
     	
     	System.out.println();
     	
-    	// Get fields 	
+    	// Get and print fields
+    	String classFieldName;
     	Field[] classFields = c.getDeclaredFields();
     	for(Field classField: classFields) {
+    		classFieldName = classField.getName();
     		classField.setAccessible(true);
     		printSpacing(depth);
-    		System.out.println(className + " Field Name: " + classField.getName());
+    		System.out.println("Field Name: " + classFieldName);
     		printSpacing(depth);
-    		System.out.println(className + " Field Type: " + classField.getType().getTypeName());
+    		System.out.println(classFieldName + " Field Type: " + classField.getType().getTypeName());
     		printSpacing(depth);
-    		System.out.println(className + " Modifier: " + Modifier.toString(classField.getModifiers()));
+    		System.out.println(classFieldName + " Modifier: " + Modifier.toString(classField.getModifiers()));
     		
     		try {
 				Object value = classField.get(obj);
 				printSpacing(depth);
 	    		System.out.println(className + " Field Value: " + value);
+	    		if(recursive = true) {
+	    			inspectClass(value.getClass(), value, recursive, depth+1);
+	    		}
 			} catch (IllegalArgumentException | IllegalAccessException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
     		System.out.println();
+    		
+
     	}
     	
     }
@@ -113,5 +106,23 @@ public class Inspector {
     	for(int i = 0; i < depth*4; i++) {
     		System.out.print(" ");
     	}
+    }
+    
+    private void printConstructor(Constructor classConstructor, int depth) {
+    	System.out.println();
+		printSpacing(depth);
+		System.out.println("Constructor Name: " + classConstructor.getName());
+		Class[] parameterTypes = classConstructor.getParameterTypes();
+		
+		printSpacing(depth);
+		System.out.print(classConstructor.getName() + " Parameter Type: ");
+		for(Class parameterType: parameterTypes) {
+			printSpacing(depth);
+			System.out.print(parameterType.getName());
+		}
+		System.out.println();
+		
+		printSpacing(depth);
+		System.out.println(classConstructor.getName() + " Modifier: " + Modifier.toString(classConstructor.getModifiers()));
     }
 }
