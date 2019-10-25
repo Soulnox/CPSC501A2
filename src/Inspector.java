@@ -10,7 +10,7 @@ public class Inspector {
     private void inspectClass(Class c, Object obj, boolean recursive, int depth) {
     	
     	//Recursion break
-    	if(c.getSuperclass() == null || c.getInterfaces() == null) {
+    	if(c.getSuperclass() == null || c.getInterfaces() == null || c.isPrimitive() == true) {
     		return;
     	}
     	
@@ -39,9 +39,13 @@ public class Inspector {
     	Constructor[] classConstructors = c.getConstructors();
     	for(Constructor classConstructor: classConstructors) {
     		printConstructor(classConstructor, depth);
+    		
+    		if(recursive == true) {
+    			//inspectClass(classConstructor.getClass(), classConstructor, recursive, depth+1);
+    		}
     	}
     	// Get and print methods
-    	Method[] classMethods = c.getMethods();
+    	Method[] classMethods = c.getDeclaredMethods();
     	String methodName;
     	for(Method classMethod: classMethods) {
     		//Print Method Name
@@ -88,7 +92,7 @@ public class Inspector {
 				Object value = classField.get(obj);
 				printSpacing(depth);
 	    		System.out.println(className + " Field Value: " + value);
-	    		if(recursive = true) {
+	    		if(recursive = true && value != null && depth == 0) {
 	    			inspectClass(value.getClass(), value, recursive, depth+1);
 	    		}
 			} catch (IllegalArgumentException | IllegalAccessException e) {
