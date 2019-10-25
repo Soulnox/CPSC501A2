@@ -46,34 +46,7 @@ public class Inspector {
     	}
     	// Get and print methods
     	Method[] classMethods = c.getDeclaredMethods();
-    	String methodName;
-    	for(Method classMethod: classMethods) {
-    		//Print Method Name
-    		methodName = classMethod.getName();
-    		System.out.println();
-    		printSpacing(depth);
-    		System.out.println(className + " Method Name: " + methodName);
-    		
-    		//Print exceptions
-    		Class[] methodExceptions = classMethod.getExceptionTypes();
-    		for(Class methodExeption: methodExceptions) {
-    			printSpacing(depth);
-    			System.out.println("Exception: " + methodExeption.getName());
-    		}
-    		
-    		//Print Parameter Types
-    		Class[] methodParameters = classMethod.getParameterTypes();
-    		for(Class methodParameter: methodParameters) {
-    			printSpacing(depth);
-    			System.out.println("Parameter Type: " + methodParameter.getName());
-    		}
-    		
-    		//Print Return Type
-    		printSpacing(depth);
-    		System.out.println("Return Type: " + classMethod.getReturnType().getTypeName());
-    	}
-    	
-    	System.out.println();
+    	printClassMethods(classMethods, depth, className);
     	
     	// Get and print fields
     	String classFieldName;
@@ -128,5 +101,36 @@ public class Inspector {
 		
 		printSpacing(depth);
 		System.out.println(classConstructor.getName() + " Modifier: " + Modifier.toString(classConstructor.getModifiers()));
+    }
+    
+    private void printClassMethods(Method[] classMethods, int depth, String className) {
+    	String methodName;
+    	for(Method classMethod: classMethods) {
+    		//Print Method Name
+    		methodName = classMethod.getName();
+    		System.out.println();
+    		printSpacing(depth);
+    		System.out.println(className + " Method Name: " + methodName);
+    		
+    		//Print exceptions
+    		Class[] methodExceptions = classMethod.getExceptionTypes();
+    		for(Class methodExeption: methodExceptions) {
+    			printSpacing(depth);
+    			System.out.println(methodName + " Exception: " + methodExeption.getName());
+    		}
+    		
+    		//Print Parameter Types
+    		Class[] methodParameters = classMethod.getParameterTypes();
+    		for(Class methodParameter: methodParameters) {
+    			printSpacing(depth);
+    			System.out.println(methodName + " Parameter Type: " + methodParameter.getName());
+    		}
+    		
+    		//Print Return Type
+    		printSpacing(depth);
+    		System.out.println(methodName + " Return Type: " + classMethod.getReturnType().getTypeName());
+    	}
+    	
+    	System.out.println();
     }
 }
