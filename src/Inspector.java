@@ -24,8 +24,7 @@ public class Inspector {
     	Class classSuper = c.getSuperclass();
     	printSpacing(depth);
     	System.out.println("Super Class Name: " + classSuper.getName());
-    	inspectClass(classSuper, obj, recursive, depth+1);
-    	
+    	inspectClass(classSuper, obj, recursive, depth+1); 	
     	
     	// Get interfaces
     	Class[] interfaces = c.getInterfaces();
@@ -39,18 +38,15 @@ public class Inspector {
     	Constructor[] classConstructors = c.getConstructors();
     	for(Constructor classConstructor: classConstructors) {
     		printConstructor(classConstructor, depth);
-    		
-    		if(recursive == true) {
-    			//inspectClass(classConstructor.getClass(), classConstructor, recursive, depth+1);
-    		}
     	}
+    	
     	// Get and print methods
     	Method[] classMethods = c.getDeclaredMethods();
     	printClassMethods(classMethods, depth, className);
     	
     	// Get and print fields
-    	String classFieldName;
     	Field[] classFields = c.getDeclaredFields();
+    	String classFieldName;
     	for(Field classField: classFields) {
     		classFieldName = classField.getName();
     		classField.setAccessible(true);
@@ -73,8 +69,6 @@ public class Inspector {
 				e.printStackTrace();
 			}
     		System.out.println();
-    		
-
     	}
     	
     }
